@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <title>bravo h5 - 频道 </title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.css">
+
+    <!-- Custom styles for this template -->
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="/css/page.css">
+  </head>
+
+  <body>
+
+    <div class="container">
+      <!-- page header -->
+      <% include header/header.html%>
+
+      <!-- page top banner -->
+      <% include header/top-banner.html%>
+
+      <div class="jumbotron clearfix">
+          <ul class="ul-clean " >
+              <!-- template -->
+              <li class="list-unstyled float-l" >
+                  <div class="rect-80">
+                      <span class="glyphicon glyphicon-plus fz-24 mt-10"></span><br/>
+                      <span class="glyphicon-class">模板系统</spazn>
+                  </div>
+              </li>
+
+              <!-- custom page by legend -->
+              <li class="list-unstyled float-l" id="custom-config" >
+                  <div class="rect-80">
+                      <span class="glyphicon glyphicon-pencil fz-24 mt-10"></span><br/>
+                      <span class="glyphicon-class">自定义</spazn>
+                  </div>
+              </li>
+          </ul>
+      </div>
+      <% include modal.html%>
+
+    </div> <!-- /container -->
+
+    <script type="text/html" charset="utf-8" id="custom-config-content">
+          <div class="custom-config-content">
+              <div class="forum-group">
+                  <div class="input-group input-group-lg">
+                      <span class="input-group-addon" id="sizing-addon1">名称</span>
+                      <input name="title" type="text" class="form-control" placeholder="title" aria-describedby="sizing-addon1">
+                  </div>
+              </div>
+              <div class="forum-group mt-10">
+                  <div class="input-group input-group-lg">
+                      <span class="input-group-addon" id="sizing-addon-name">name</span>
+                      <input name="name" type="text" class="form-control" placeholder="must be xx_xx " aria-describedby="sizing-addon-name">
+                  </div>
+              </div>
+          </div>
+    </script>
+
+    <script type="text/html" charset="utf-8" id="custom-config-footer">
+        <button type="button" id="save-config" class="btn btn-primary">保存</button>
+    </script>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/js/jquery.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/index.js"></script>
+
+    <script>
+      $(function  () {
+          // bind evnent
+          $('#custom-config').on('click', function () {
+              var dialogContent = $('#custom-config-content').text();
+              var dialogFooter = $('#custom-config-footer').text();
+              var $configDialog = $('.bs-example-modal-lg');
+
+              $configDialog.find('.modal-body').html(dialogContent);
+              $configDialog.find('#footer-extend').html(dialogFooter);
+
+              //$configDialog.find('.modal-dialog').addClass('modal-size-w-100-p');
+              $configDialog.modal({
+                  keyboard: false,
+                  backdrop: 'static'
+              });
+              $configDialog.find('#save-config').on('click', function () {
+
+                  var title = $configDialog.find('input[name="title"]').val();
+                  var name =$configDialog.find('input[name="name"]').val();
+                  var data = {
+                      title: title,
+                      name: name
+                  };
+                  $.ajax({
+                      url: '/page/create',
+                      type: 'POST',
+                      data: data
+                  }).done(function (result) {
+                      if (result.no === 1) {
+                          $configDialog.modal('hide');
+                          setTimeout(function() {
+                              var _id = result._id;
+                              var src = 'http://legend.baidu.com:8150/edit/legend/' + result.legendId;
+                              var params = '?_id=' + result._id + '&appKey=tieba&secretKey=tieba-key';
+                              src += params;
+                              var iframeDom = '<iframe src="' + src + '" width="1200"  height="1000"></iframe>';
+                              var $configDialog = $('.bs-example-modal-lg');
+                              $configDialog.find('.modal-body').html(iframeDom);
+                              $configDialog.find('.modal-dialog').addClass('modal-size-w-100-p');
+                              $configDialog.modal({
+                                  keyboard: false,
+                                  backdrop: 'static'
+                              });
+                          }, 1000);
+                      }
+                  }).fail(function (result) {
+                      console.log('/page/create failed');
+                      $configDialog.modal('hide');
+                      console.log(result);
+                      alert('failed....');
+                  });
+              });
+          });
+
+          // modal show listen
+          $('.bs-example-modal-lg').on('show.bs.modal', function (event) {
+              // Button that triggered the modal
+              var button = $(event.relatedTarget);
+              var modal = $(this);
+              console.log('modal', modal);
+          });
+
+          // modal hidden listen
+          $('.bs-example-modal-lg').on('hidden.bs.modal', function (event) {
+              var modal = $(this);
+              modal.find('.modal-dialog').removeClass('modal-size-w-100-p');
+              modal.find('#footer-extend').empty();
+          });
+      });
+    </script>
+  </body>
+</html>

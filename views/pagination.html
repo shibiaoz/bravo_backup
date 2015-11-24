@@ -1,0 +1,58 @@
+<!-- 翻页组件 -->
+<%
+  var pageNavNumber = 10;
+  var totalPage = pageInfo.totalPage;
+  var p = pageInfo.p;
+  var iteratorArr = [];
+  var renderNavArr = [];
+  var endArr = [];
+  var prefixArr = [];
+  for(var i = 0; i < totalPage; i++ ) {
+      iteratorArr.push(i + 1);
+  }
+  if (totalPage < 10 ) {
+    renderNavArr = iteratorArr.slice(0);
+  }
+  else {
+        endArr = iteratorArr.slice(p);
+        if (endArr.length < 10) {
+              prefixArr = iteratorArr.slice(Math.abs(Math.abs(endArr.length - pageNavNumber)-p), p);
+            renderNavArr = prefixArr.concat(endArr);
+        }
+        else {
+            if (p < 5) {
+                renderNavArr = iteratorArr.slice(0, 10);
+            }
+            else {
+                renderNavArr = iteratorArr.slice(p,p+4).concat(iteratorArr.slice(p,-5));
+            }
+        }
+  }
+%>
+<div class="container">
+  <nav>
+    <ul class="pagination">
+          <li>
+              <a href="?p=<%=page%>" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+          </li>
+      <%
+        renderNavArr.forEach(function (page){
+          %>
+          <li>
+              <a href="?p=<%=page%>" aria-label="Previous">
+                <span aria-hidden="true"><%=page%></span>
+              </a>
+          </li>
+          <%
+        });
+      %>
+      <li>
+        <a href="#" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>

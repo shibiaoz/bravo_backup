@@ -1,0 +1,21 @@
+{
+  "name": "bravoh5",
+  "version": "0.0.0",
+  "authors": [
+    "shibiaoz <shibiaoz@sina.cn>"
+  ],
+  "description": "bravoh5 project",
+  "license": "MIT",
+  "homepage": "shibiaoz.github.io",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-sweetalert": "~0.4.5",
+    "bootstrap": "~3.3.5"
+  }
+}

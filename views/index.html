@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+   <% include header/head_meta.html%>
+   <link rel="stylesheet"  href="http://tieba.pics/static/dist/normalize.css">
+   <link rel="stylesheet" href="/css/masted.css">
+  </head>
+
+  <body>
+    <style type="text/css">
+    /**----------------*/
+    .covervid-h1-title {
+        position: absolute;
+        width: 100%;
+        font-weight: 700;
+        font-size: 110px;
+        text-align: center;
+        height: 120px;
+        line-height: 1;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        color: #fff;
+    }
+    .covervid-h1-title span {
+        margin-top: 20px;
+        display: block;
+        font-size: 18px;
+        letter-spacing: 0.43em;
+        font-weight: 400;
+        text-transform: uppercase;
+        padding-left: 7px;
+        opacity: 0.5;
+    }
+    .masthead-arrow {
+        position: absolute;
+        bottom: 25px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+        width: 30px;
+        height: 30px;
+        border-right: 2px solid #fff;
+        border-bottom: 2px solid #fff;
+    }
+
+
+    /**
+     *
+     */
+    .container {
+      min-height: 1000px;
+    }
+
+    .masthead  {
+      margin-bottom: 10px;
+    }
+
+
+    </style>
+    <section class="masthead">
+          <video muted class="masthead-video" autoplay loop poster="img/video-fallback.png">
+              <source src="http://tieba.pics/static/lib/covervid/dreamscapes.mp4" type="video/mp4">
+          </video>
+          <h1
+              class="covervid-h1-title"
+              style="opacity: 1; transform: translateY(0%);">
+              移动H5推广
+            <span>快速构建移动H5页面</span>
+          </h1>
+          <div class="masthead-arrow" style="opacity: 0.332;"></div>
+    </section>
+    <div class="container">
+      <!-- page header -->
+      <% include header/header.html%>
+
+      <!-- page top banner -->
+      <% include header/top-banner.html%>
+
+      <div class="jumbotron" id="jump-list-wraper">
+          <ul class="jump-list ul-clean " >
+              <li class="list-unstyled" id="add-plan">
+                  <div class="rect-80">
+                      <span class="glyphicon glyphicon-plus fz-24 mt-10"></span><br/>
+                      <span class="glyphicon-class">创建方案</spazn>
+                  </div>
+              </li>
+          </ul>
+      </div>
+
+    </div> <!-- /container -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/js/jquery.js"></script>
+    <script src="/js/covervid.js"></script>
+    <script src="/js/masted.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/index.js"></script>
+    <script type="text/javascript">
+     // $('.masthead-video').coverVid(1920, 1080);
+    $(function  () {
+        // $('.covervid-video').coverVid($(window).width());
+        // $('.masthead-video').coverVid(1920, 1080);
+        coverVid(document.querySelector('.masthead-video'), 640, 360);
+    });
+    </script>
+  </body>
+</html>

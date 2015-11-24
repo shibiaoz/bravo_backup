@@ -1,0 +1,38 @@
+.rect-80 {
+    margin: 10px;
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
+    text-align: center;
+    background-color: #fff;
+    display: inline-block;
+}
+.float-l {
+    float: left;
+}
+.fz-24 {
+    font-size: 24px;
+}
+.jump-list {
+
+}
+.mt-10 {
+    margin-top: 12px;
+}
+
+/**
+ * top banner
+ */
+.top-banner {
+    background-image: url(/img/top-banner.png);
+    background-color: #555FBD;
+    background-size: 100% 100%;
+    color: white;
+}
+
+/**
+ * modal dialog extend modal size
+ */
+.modal-size-w-100-p {
+    width:100%;
+}

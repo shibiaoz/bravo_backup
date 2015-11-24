@@ -1,0 +1,11 @@
+build
+bower_components
+node_modules
+node_modules/supervisor
+logs
+dist
+.idea
+.sass-cache
+mongo-shell-tools
+npm-debug.log
+covervid

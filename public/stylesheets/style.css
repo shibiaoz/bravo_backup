@@ -1,0 +1,18 @@
+/*============================================
+
+    公用页面级样式覆盖
+==============================================
+ */
+
+body {
+    background-color: #3360A3;
+    background-image: url(/img/top-banner.png);
+    background-size: container;
+}
+.container {
+    background-color: #fff;
+}
+
+.jumbotron {
+    background-color: #fff;
+}

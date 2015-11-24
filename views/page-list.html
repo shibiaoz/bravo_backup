@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <title>bravo h5 </title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/lib/bootstrap-sweetalert/sweet-alert.css">
+    <!-- Custom styles for this template -->
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="/css/page.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- page header -->
+        <% include header/header.html%>
+            <!-- page top banner -->
+            <% include header/top-banner.html%>
+                <div class="jumbotron">
+                    <table class="table table-bordered table-hover" id="page-list-talbe">
+                        <tr>
+                            <th>ID</th>
+                            <th>title</th>
+                            <th>desp</th>
+                            <th>author</th>
+                            <th>pageStatus</th>
+                            <th>updateTime</th>
+                            <th>operation</th>
+                        </tr>
+                        <%
+                            list.forEach(function(page){
+                        %>
+                        <tr>
+                            <td><%=page._id%></td>
+                            <td><%=page.title%></td>
+                            <td><%=page.name || page.desp%></td>
+                            <td><%=page.author%></td>
+                            <td><%=page.pageStatus || '-'%></td>
+                            <td><%=page.updateTime %></td>
+                            <td>
+                                <button class="btn btn-default j_edit-page-btn"
+                                    data-id="<%=page._id%>"
+                                    data-lgid="<%=page.legendId%>"
+                                    type="button">
+                                    edit
+                                </button>
+
+                                <button class="btn btn-sm btn-danger j_del-page-btn"
+                                    data-id="<%=page._id%>"
+                                    type="button">
+                                    delete
+                                </button>
+                            </td>
+                        </tr>
+                        <%
+                            });
+                        %>
+                    </table>
+                </div>
+    </div>
+    <% include modal.html%>
+    <div class="container">
+        <nav>
+            <div id="page1"></div>
+        </nav>
+    </div>
+
+    <!-- /container -->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/js/jquery.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/bootstrap-paginator.js"></script>
+    <script src="/js/index.js"></script>
+
+    <!-- import bootstrap-sweet-alert     -->
+    <script src="/lib/bootstrap-sweetalert/sweet-alert.js"></script>
+    <script>
+        $(function () {
+            //分页功能
+            var options = {
+                currentPage: <%=pageInfo.p%>,
+                totalPages: <%=pageInfo.totalPage%>,
+                numberOfPages:10,
+                pageUrl: function(type, page, current){
+                    return "?p=" + page;
+                }
+            };
+            console.log(options);
+            $('#page1').bootstrapPaginator(options);
+            // channel page  edit and delte
+            (function () {
+                function channel ($el) {
+                    this.$el = $el || $('body');
+                    this.$configDialog = null;
+                    this.init();
+                }
+                channel.prototype.init = function () {
+                    this.bindEvent();
+                }
+                channel.prototype.bindEvent = function () {
+                    var that = this;
+                    var $el = this.$el;
+                    $el.on('click', '.j_edit-page-btn', function (event) {
+                        var e = $.event.fix(event);
+                        var tarEle = e.target;
+                        var $ele = $(tarEle);
+                        var id = $ele.data('id');
+                        var legendId = $ele.data('lgid');
+
+                        if (!legendId || legendId == null) {
+                            swal("error", "legendId is null)", "error");
+                            return;
+                        }
+                        // dialog show legend editor
+                        var $configDialog = $('.bs-example-modal-lg');
+                        var src = 'http://legend.baidu.com:8150/edit/legend/' + legendId;
+                        var params = '?_id=' + id + '&appKey=tieba&secretKey=tieba-key';
+                        src += params;
+                        var iframeDom = '<iframe src="' + src + '" width="1200"  height="1000"></iframe>';
+                        $configDialog.find('.modal-body').html(iframeDom);
+                        $configDialog.find('.modal-dialog').addClass('modal-size-w-100-p');
+                        $configDialog.modal({
+                            keyboard: false,
+                            backdrop: 'static'
+                        });
+                        that.$configDialog = $configDialog;
+                        // modal hidden listen
+                        $configDialog.on('hidden.bs.modal', function (event) {
+                              var modal = $(this);
+                              modal.find('.modal-dialog').removeClass('modal-size-w-100-p');
+                        });
+
+                    }).on('click', '.j_del-page-btn', function (event) {
+                        var $ele = $($.event.fix(event).target);
+                        var id = $ele.data('id');
+                        var that = this;
+                        if (id) {
+                            $.ajax({
+                                url:'/page/del/' + id
+                            }).fail(function (result){
+                                swal("del this page", JSON.stringify(result), "erro");
+                            }).success(function (result) {
+                                $ele.closest('tr').remove();
+                                swal("del operate", result && result.msg || 'success', "success");
+                            });
+                        }
+                        else {
+                            swal("error", "do not have the id", "error");
+                        }
+                    });
+                }
+                var channel = new channel($('#page-list-talbe'));
+
+                window.addEventListener("message", function(evt){
+                    console.log(evt.data);
+                    // http://legend.baidu.com:8150
+                    if(evt.origin.indexOf('legend.baidu.com') > 0) {
+                        if (evt.data == 'Published') {
+                            channel.$configDialog.modal('hide');
+                        }
+                    }
+                }, false);
+            })();
+            //
+        });
+    </script>
+</body>
+
+</html>
