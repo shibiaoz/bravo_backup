@@ -3,7 +3,6 @@
 - http://shushuo.baidu.com/legend/dev/?id=e9731b07-77cb-11e5-873e-70e2840c1e14
 
 
-
 - nohup
 ```
 // 这样运行页面会很慢，后来发现dep.sh 是supervisor bin/www
